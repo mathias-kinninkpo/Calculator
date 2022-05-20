@@ -1,0 +1,408 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Mar 21 03:33:35 2022
+
+@author: vaillant123hero
+"""
+
+from tkinter import *
+
+import tkinter.messagebox
+
+from math import *
+
+import math
+
+#----------------configuration--------------------------
+
+root = Tk()
+
+root.resizable(width=False,height=False)
+
+root.geometry("558x640+0+0")
+
+root.title("Vaillant héro calculator")
+
+root.configure(bg='powder blue')
+
+calculate = Frame(root)
+
+#------------------------------fonctions elementaires ------------------------------------------
+
+def quitter():
+    quitter = tkinter.messagebox.askyesno("Vaillant héro calculator","Etes vous sûr de vouloir quitter ?")
+    if quitter > 0:
+        root.destroy()
+        return
+    
+    
+
+
+def standar():
+    root.resizable(width=False,height=False)
+    root.geometry("558x640+0+0")
+    
+    
+    
+def scientifique():
+    root.resizable(width=False,height=False)
+    root.geometry("965x640+0+0")
+    
+    
+    
+    
+def insert(number):
+    global operator
+    operator = operator + str(number)
+    inter_value.set(operator)
+    
+    
+#--------------------------fonction-----------------------------------------------------*
+
+
+
+
+class calculatrice:
+    
+    def __init__(self):
+        self.current = ""
+        self.result = ""
+        self.tex_input = True
+        self.screen_word = ""
+        self.P = pi
+        
+
+
+    def display(self,value):
+        textDisplay.delete(0,END)
+        textDisplay.insert(0, value)
+        textDisplay.xview_moveto(1)
+        
+    
+ 
+    
+    def internumber(self,num):
+        number1 = textDisplay.get()
+        number2 = str(num)
+        if self.tex_input:
+            if (number1=="ERROR"):
+                self.current = number2
+            else:
+                self.current = number1 + number2
+        else:
+            if (number2=="+") or (number2=="-") or (number2=="x") or (number2=="÷") or(number2=="%") or (number2=="²") :
+                self.current = number1 + number2
+            else:
+                self.current = number2
+            self.tex_input = True
+            
+            
+       
+       # if ( number1[len(number1)-1] == "+") or ( number1[len(number1)-1]== "-") or ( number1[len(number1)-1] == "*") or ( number1[len(number1)-1] == "/") or ( number1[len(number1)-1] == "."):
+        #    if (number2 == "+") or (number2 == "-") or (number2 == "*") or (number2 == "/") or (number2 == "."):
+         #       number2 = ""
+        
+        self.display(self.current)
+        
+        
+        
+      
+   # def percent(self):
+   #     self.current = textDisplay.get()
+      #  if "%" in self.current:
+         #   self.current = self.current.replace("%","/100")
+       # return self.current"""
+            
+        
+        
+        
+
+
+
+    def equale(self):
+        # self.screen_word = textDisplay.get()
+        self.current = textDisplay.get()
+        
+        if "²" in self.current:
+        
+            self.current = self.current.replace("²","**2 ")
+            
+        if "^" in self.current :
+            self.current = self.current.replace("^","**")
+            
+        if "√" in self.current:
+            self.current = self.current.replace("√","sqrt")
+            
+        if "÷" in self.current :
+            self.current = self.current.replace("÷","/")
+            
+        if "π" in self.current : 
+            self.current = self.current.replace("π",str(self.P))
+            
+        if "x" in self.current :
+            self.current = self.current.replace("x","*")
+            
+        if "ln" in self.current:
+            self.current = self.current.replace("ln","log")
+            
+        if "log" in self.current:
+            self.current = self.current.replace("log","math.log")
+            
+        if "%" in self.current:
+            self.current = self.current.replace("%","/100")
+            
+        if "!" in self.current:
+            self.current = self.current.replace("!","math.factorial")
+            
+        
+            
+        
+            #self.current = self.current.replace("%","/100 ")
+            
+        
+            
+                
+        
+            
+        try:
+            self.current = eval(self.current)
+            self.display(self.current)
+            self.tex_input = False
+        except:
+            self.display("ERROR")
+            
+            
+            
+
+
+    def delate(self):
+        
+        self.current = textDisplay.get()
+        if self.current == "ERROR":
+            self.delate_all()
+        else:
+            self.current = self.current[:-1]
+            self.display(self.current)
+        
+        
+        
+        
+        
+        
+        
+    def delate_all(self):
+        
+        self.current = textDisplay.get()
+        self.current = ""
+        self.display(self.current)
+            
+
+
+
+
+
+#--------------------------------menu et ses configurations----------------------
+
+input_value = calculatrice()
+
+inter_value = StringVar()
+
+
+calculate.grid()
+
+bareMenu = Menu(calculate)
+
+optionmenu = Menu(bareMenu,tearoff = 0)
+
+bareMenu.add_cascade(label="Menu",menu=optionmenu,font=('arial',15,'bold'))
+
+optionmenu.add_command(label="standar",command = standar,font=('arial',15,'bold'))
+
+optionmenu.add_command(label="scientific",command = scientifique,font=('arial',15,'bold'))
+
+optionmenu.add_command(label="Quitter",command = quitter,font=('arial',15,'bold'))
+
+root.config(menu=bareMenu)
+
+textDisplay = Entry(calculate,font=('arial',28,'bold'),bg='yellow',width=25,bd=25,justify='right')
+
+
+textDisplay.grid(row=0,column=0, columnspan = 4,pady =10)
+
+
+
+
+
+
+#-----------------------------cration des boutons--------------------------------
+
+
+
+
+
+btn7 = Button(calculate,font=('arial',28,'bold'),text='7',command =lambda: input_value.internumber('7'),bg='powder blue',width=5,height = 2,bd=5)
+
+btn7.grid(row = 2,column = 0)
+
+btn8 = Button(calculate,font=('arial',28,'bold'),text='8',command = lambda: input_value.internumber('8'),bg='powder blue',width=5,height = 2,bd=5)
+
+btn8.grid(row = 2,column = 1)
+
+btn9 = Button(calculate,font=('arial',28,'bold'),text='9',command = lambda: input_value.internumber('9'),bg='powder blue',width=5,height = 2,bd=5)
+
+btn9.grid(row = 2,column = 2)
+
+btn4 = Button(calculate,font=('arial',28,'bold'),text='4',command = lambda: input_value.internumber('4'),bg='powder blue',width=5,height = 2,bd=5)
+
+btn4.grid(row = 3,column = 0)
+
+btn5 = Button(calculate,font=('arial',28,'bold'),text='5',command = lambda: input_value.internumber('5'),bg='powder blue',width=5,height = 2,bd=5)
+
+btn5.grid(row = 3,column = 1)
+
+btn6 = Button(calculate,font=('arial',28,'bold'),text='6',command = lambda: input_value.internumber('6'),bg='powder blue',width=5,height = 2,bd=5)
+
+btn6.grid(row = 3,column = 2)
+
+btn1 = Button(calculate,font=('arial',28,'bold'),text='1',command = lambda: input_value.internumber('1'),bg='powder blue',width=5,height = 2,bd=5)
+
+btn1.grid(row = 4,column = 0)
+
+btn2 = Button(calculate,font=('arial',28,'bold'),text='2',command = lambda: input_value.internumber('2'),bg='powder blue',width=5,height = 2,bd=5)
+
+btn2.grid(row = 4,column = 1)
+
+btn3 = Button(calculate,font=('arial',28,'bold'),text='3',command = lambda: input_value.internumber('3'),bg='powder blue',width=5,height = 2,bd=5)
+
+btn3.grid(row = 4,column = 2)
+
+
+btnclear = Button(calculate,font=('arial',28,'bold'),text='C',command = input_value.delate,bg='powder blue',width=5,height = 2,bd=5)
+
+btnclear.grid(row = 1,column = 0)
+
+btnclearall = Button(calculate,font=('arial',28,'bold'),text='CE',command= input_value.delate_all,bg='powder blue',width=5,height = 2,bd=5)
+
+btnclearall.grid(row = 1,column = 1)
+
+btnsqrt = Button(calculate,font=('arial',28,'bold'),text='√',command = lambda: input_value.internumber('√('),bg='powder blue',width=5,height = 2,bd=5)
+
+btnsqrt.grid(row = 1,column = 2)
+
+btndiv = Button(calculate,font=('arial',28,'bold'),text='÷',command = lambda: input_value.internumber('÷'),bg='powder blue',width=5,height = 2,bd=5)
+
+btndiv.grid(row = 1,column = 3)
+
+btnmult = Button(calculate,font=('arial',28,'bold'),text='x',command = lambda: input_value.internumber('x'),bg='powder blue',width=5,height = 2,bd=5)
+
+btnmult.grid(row = 2,column = 3)
+
+btncoma = Button(calculate,font=('arial',28,'bold'),text='.',command = lambda: input_value.internumber('.'),bg='powder blue',width=5,height = 2,bd=5)
+
+btncoma.grid(row = 5,column = 0)
+
+btnsquare = Button(calculate,font=('arial',28,'bold'),text='x²',command = lambda: input_value.internumber('²'),bg='powder blue',width=5,height = 2,bd=5)
+
+btnsquare.grid(row = 5,column = 2)
+
+btnzero = Button(calculate,font=('arial',28,'bold'),text='0',command = lambda: input_value.internumber('0'),bg='powder blue',width=5,height = 2,bd=5)
+
+btnzero.grid(row = 5,column = 1)
+
+btnequal = Button(calculate,font=('arial',28,'bold'),text='=',command = input_value.equale ,bg='powder blue',width=5,height = 2,bd=5)
+
+btnequal.grid(row = 5,column = 3)
+
+btnadd = Button(calculate,font=('arial',28,'bold'),text='+',command = lambda: input_value.internumber('+'),bg='powder blue',width=5,height = 2,bd=5)
+
+btnadd.grid(row = 4,column = 3)
+
+btnsus = Button(calculate,font=('arial',28,'bold'),text='-',command = lambda: input_value.internumber('-'),bg='powder blue',width=5,height = 2,bd=5)
+
+btnsus.grid(row = 3,column = 3)
+
+
+
+
+#-----------------------les boutons scientifiques -----------------------------------------------------
+
+
+
+
+
+sinus = Button(calculate,font=('arial',28,'bold'),text='sin',command = lambda: input_value.internumber('sin('),bg='powder blue',width=5,height = 2,bd=5)
+
+sinus.grid(row = 1,column = 4)
+
+cosinus = Button(calculate,font=('arial',28,'bold'),text='cos',command = lambda: input_value.internumber('cos('),bg='powder blue',width=5,height = 2,bd=5)
+
+cosinus.grid(row = 1,column = 5)
+
+tangente = Button(calculate,font=('arial',28,'bold'),text='tan',command = lambda: input_value.internumber('tan('),bg='powder blue',width=5,height = 2,bd=5)
+
+tangente.grid(row = 2,column = 4)
+
+asinus = Button(calculate,font=('arial',28,'bold'),text='asinus',command = lambda: input_value.internumber('asin('),bg='powder blue',width=5,height = 2,bd=5)
+
+asinus.grid(row = 2,column = 5)
+
+acosinus = Button(calculate,font=('arial',28,'bold'),text='acos',command = lambda: input_value.internumber('acos('),bg='powder blue',width=5,height = 2,bd=5) 
+
+acosinus.grid(row = 3,column = 4)
+
+atangente = Button(calculate,font=('arial',28,'bold'),text='atan',command = lambda: input_value.internumber('atan('),bg='powder blue',width=5,height = 2,bd=5)
+
+atangente.grid(row = 3,column = 5)
+
+log = Button(calculate,font=('arial',28,'bold'),text='log',command = lambda: input_value.internumber('log('),bg='powder blue',width=5,height = 2,bd=5)
+
+log.grid(row = 4,column = 4)
+
+expo = Button(calculate,font=('arial',28,'bold'),text='^',command = lambda: input_value.internumber('^'),bg='powder blue',width=5,height = 2,bd=5)
+
+expo.grid(row = 4,column = 5)
+
+pi = Button(calculate,font=('arial',28,'bold'),text='π',command = lambda: input_value.internumber('π'),bg='powder blue',width=5,height = 2,bd=5)
+
+pi.grid(row = 5,column = 4)
+
+ouverte = Button(calculate,font=('arial',28,'bold'),text='(',command = lambda: input_value.internumber('('),bg='powder blue',width=5,height = 2,bd=5)
+
+ouverte.grid(row = 5,column = 5)
+
+fermee = Button(calculate,font=('arial',28,'bold'),text=')',command = lambda: input_value.internumber(')'),bg='powder blue',width=5,height = 2,bd=5)
+
+fermee.grid(row = 5,column = 6)
+
+modulo = Button(calculate,font=('arial',28,'bold'),text='%',command = lambda: input_value.internumber('%'),bg='powder blue',width=5,height = 2,bd=5)
+
+modulo.grid(row = 1,column = 6)
+
+ln = Button(calculate,font=('arial',28,'bold'),text='ln',command = lambda: input_value.internumber('ln('),bg='powder blue',width=5,height = 2,bd=5)
+
+ln.grid(row = 2,column = 6)
+
+factorielle = Button(calculate,font=('arial',28,'bold'),text='!',command = lambda: input_value.internumber('!'),bg='powder blue',width=5,height = 2,bd=5)
+
+factorielle.grid(row = 3,column = 6)
+
+exponentielle = Button(calculate,font=('arial',28,'bold'),text='e',command = lambda: input_value.internumber('e'),bg='powder blue',width=5,height = 2,bd=5)
+
+exponentielle.grid(row = 4, column = 6)
+
+name = Label(calculate, text = 'scientific calculator',font=('arial',28,'bold'),fg='green',bd=2)
+
+name.grid(row = 0,column = 4,columnspan = 3)
+
+
+
+
+
+
+
+
+
+
+
+root.mainloop()
